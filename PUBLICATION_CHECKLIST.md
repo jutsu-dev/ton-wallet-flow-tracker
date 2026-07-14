@@ -39,7 +39,8 @@ State of the repository against the pre-publication requirements. `[x]` is verif
 ## Blocking actions before any public push (owner only)
 
 - [x] Owner gave explicit confirmation to create and push the public repository
-- [ ] Authenticate GitHub CLI as `jutsu-dev` (`gh auth login`) — currently not logged in
+- [x] GitHub CLI authenticated as `jutsu-dev`
+- [x] Published: https://github.com/jutsu-dev/ton-wallet-flow-tracker
 
 ## Residual risk accepted by the owner
 
