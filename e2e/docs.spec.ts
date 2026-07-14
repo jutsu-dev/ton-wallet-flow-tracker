@@ -97,6 +97,38 @@ test.describe('public documentation', () => {
     await expect(page.getByRole('heading', { name: 'Документация', level: 1 })).toBeVisible();
   });
 
+  test('is indexable, while the rest of the instance is not', async ({ page, request }) => {
+    const robots = await request.get('/robots.txt');
+    expect(robots.ok()).toBe(true);
+    const body = await robots.text();
+    expect(body).toContain('Allow: /docs');
+    expect(body).toContain('Disallow: /');
+    expect(body).toMatch(/Sitemap: https?:\/\/.+\/sitemap\.xml/);
+
+    const sitemap = await request.get('/sitemap.xml');
+    expect(sitemap.ok()).toBe(true);
+    const xml = await sitemap.text();
+    expect(xml).toContain('/docs');
+    expect(xml).toContain('hreflang="en"');
+    // The private app must not be advertised to crawlers.
+    expect(xml).not.toContain('/login');
+    expect(xml).not.toContain('/admin');
+
+    await page.goto('/docs');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'index, follow');
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/docs$/);
+
+    await page.goto('/docs?lang=en');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'index, follow');
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', /\/docs\?lang=en$/);
+    // The document is lang="ru"; the English guide declares its own subtree.
+    await expect(page.locator('div[lang="en"]').first()).toBeVisible();
+
+    // Everything that is not the guide stays out of search results.
+    await page.goto('/login');
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute('content', 'noindex, nofollow');
+  });
+
   test('shows the signed-in header when a session exists', async ({ page }) => {
     await loginAndLand(page, 'e2e-owner', 'E2e-Owner-Pass-1');
     await page.getByRole('link', { name: 'Документация' }).first().click();

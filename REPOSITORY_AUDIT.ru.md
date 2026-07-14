@@ -119,7 +119,7 @@
 | `package.json`, `package-lock.json` | Зависимости | Lock-файл сохранён: именно он делает `npm ci` воспроизводимым |
 | `tsconfig.json`, `next.config.mjs`, `tailwind.config.ts`, `postcss.config.js`, `vitest.config.ts`, `playwright.config.ts`, `.eslintrc.json`, `.prettierrc.json`, `.prettierignore`, `.gitattributes`, `.gitignore` | Конфигурация инструментов | Секретов нет |
 | `.env.example` | Шаблон окружения | Каждое значение либо пустое, либо задокументированное несекретное значение по умолчанию. Ссылки на Telegram публичны по замыслу. |
-| `public/robots.txt` | Политика для краулеров | |
+| `src/app/robots.ts`, `src/app/sitemap.ts` | Политика для краулеров и карта сайта | Рендерятся на каждый запрос, поэтому содержат `APP_URL` конкретного развёртывания. Разрешают только `/docs`, всё остальное запрещено. Заменили статический `public/robots.txt`, который не мог ссылаться на URL конкретного развёртывания. |
 | `docs/assets/*.png` | Изображения для README | Демо-режим, синтетические данные, без метаданных |
 
 ## Что намеренно не отслеживается

@@ -119,7 +119,7 @@ Action taken: all corrected in both languages. The unused `/api/analyze` surface
 | `package.json`, `package-lock.json` | Dependencies | Lockfile kept: it is what makes `npm ci` reproducible |
 | `tsconfig.json`, `next.config.mjs`, `tailwind.config.ts`, `postcss.config.js`, `vitest.config.ts`, `playwright.config.ts`, `.eslintrc.json`, `.prettierrc.json`, `.prettierignore`, `.gitattributes`, `.gitignore` | Toolchain config | No secrets |
 | `.env.example` | Environment template | Every value empty or a documented non-secret default. The Telegram links are public by design. |
-| `public/robots.txt` | Crawler policy | |
+| `src/app/robots.ts`, `src/app/sitemap.ts` | Crawler policy and sitemap | Rendered per request so they carry the deployment's own `APP_URL`. Allow only `/docs`; everything else is disallowed. Replaced the static `public/robots.txt`, which could not reference a per-deployment URL. |
 | `docs/assets/*.png` | README images | Demo mode, synthetic data, no metadata |
 
 ## What is deliberately not tracked

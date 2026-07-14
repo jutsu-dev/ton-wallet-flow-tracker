@@ -27,10 +27,16 @@ protecting, the trust boundaries, the threats considered, and the residual risks
 - **Browser ↔ app.** Untrusted client input crosses here. Mitigated by session auth, CSRF
   (double-submit + same-origin), Zod validation, CSP, and secure cookies.
 - **Unauthenticated surface.** Four routes are reachable without a session by design: `/login`,
-  `POST /api/auth/login`, `GET /api/health`, and the user guide at `/docs`. The guide is static
-  content compiled into the bundle — it reads no wallet, user or database data, and its only
-  input is a `lang` parameter validated against a two-value allowlist before use. Everything
-  else redirects to `/login`.
+  `POST /api/auth/login`, `GET /api/health`, and the user guide at `/docs` (plus `/robots.txt`
+  and `/sitemap.xml`, which exist to describe it). The guide is static content compiled into the
+  bundle — it reads no wallet, user or database data, and its only input is a `lang` parameter
+  validated against a two-value allowlist before use. Everything else redirects to `/login`.
+- **Search engines.** `/docs` is deliberately indexable; every other route stays `noindex` and is
+  disallowed in `robots.txt`. The trade-off is accepted knowingly: an indexed page makes the
+  deployment's existence and address discoverable, so the instance is no longer obscure. Obscurity
+  was never a control here — access is gated by authentication, not by nobody knowing the URL —
+  but it does mean the login page will attract untargeted traffic. That is what the per-account
+  lockout and per-IP login budget are for.
 - **App ↔ TON providers.** Upstream responses are untrusted data. Mitigated by the SSRF host
   allowlist, timeouts, retries with a circuit breaker, defensive JSON parsing (missing fields
   become `null` and are flagged incomplete, never invented), and metadata sanitization.

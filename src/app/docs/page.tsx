@@ -14,9 +14,33 @@ import { DOCS, isLang, type LinkKey } from './content';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Документация — TON Wallet Flow Tracker',
-};
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ lang?: string }>;
+}): Promise<Metadata> {
+  const { lang: raw } = await searchParams;
+  const lang = isLang(raw) ? raw : 'ru';
+  const page = DOCS[lang];
+  const base = getEnv().APP_URL;
+
+  return {
+    title: `${page.title} — TON Wallet Flow Tracker`,
+    description: page.lede,
+    // The rest of the instance is private and stays noindex via the root layout.
+    // This guide is the one page meant to be findable, so it opts back in.
+    robots: { index: true, follow: true },
+    alternates: {
+      // Each language points at itself, so the two are indexed as translations
+      // rather than competing as duplicates of one page.
+      canonical: lang === 'ru' ? `${base}/docs` : `${base}/docs?lang=en`,
+      languages: {
+        ru: `${base}/docs`,
+        en: `${base}/docs?lang=en`,
+      },
+    },
+  };
+}
 
 // Resolved here rather than in content.ts so the guide stays pure data.
 const LINK_TARGETS: Record<LinkKey, string> = {
@@ -39,7 +63,10 @@ export default async function DocsPage({
   const demo = getEnv().DEMO_MODE;
 
   return (
-    <div className="flex flex-col gap-8">
+    // The document is lang="ru" (the app's only interface language), so the
+    // English guide has to declare its own language on the subtree — otherwise
+    // crawlers and screen readers both read it as Russian.
+    <div lang={lang} className="flex flex-col gap-8">
       <header className="flex flex-col gap-3">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
           <h1 className="text-2xl font-semibold tracking-tight">{page.title}</h1>
