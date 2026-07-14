@@ -53,6 +53,23 @@ jobs:
       - name: Dependency audit (fail on high or critical)
         run: npm audit --omit=dev --audit-level=high
 
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      # Internal links only. External hosts are checked on demand via
+      # `npm run check:links:external`, never in CI: a third party having a bad
+      # minute must not turn this repository red.
+      - name: Check Markdown links
+        run: npm run check:links
+
+      - name: Check every public document has a Russian counterpart
+        run: npm run check:ru
+
   secret-scan:
     runs-on: ubuntu-latest
     env:
