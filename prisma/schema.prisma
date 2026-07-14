@@ -1,0 +1,178 @@
+// TON Wallet Flow Tracker — data model.
+// Passwords are Argon2id hashes; sessions are opaque tokens stored hashed.
+// No API keys, plaintext passwords, raw session tokens, or seed phrases are stored.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  OWNER
+  MEMBER
+}
+
+enum LabelType {
+  OWN
+  SAFE
+  UNKNOWN
+  SUSPICIOUS
+  SERVICE
+  EXCHANGE
+  MARKETPLACE
+  OTHER
+}
+
+enum CheckStatus {
+  PENDING
+  RUNNING
+  SUCCESS
+  PARTIAL
+  FAILED
+}
+
+model User {
+  id                 String    @id @default(cuid())
+  username           String    @unique
+  passwordHash       String
+  role               Role      @default(MEMBER)
+  isActive           Boolean   @default(true)
+  mustChangePassword Boolean   @default(false)
+  failedLoginCount   Int       @default(0)
+  lockedUntil        DateTime?
+  lastLoginAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  sessions  Session[]
+  labels    WalletLabel[]
+  checks    WalletCheck[]
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+  ipHash    String?
+  userAgent String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("sessions")
+}
+
+model Wallet {
+  id                   String    @id @default(cuid())
+  canonicalAddress     String    @unique
+  bounceableAddress    String
+  nonBounceableAddress String
+  firstSeenAt          DateTime?
+  lastCheckedAt        DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+
+  labels WalletLabel[]
+  checks WalletCheck[]
+  events WalletEvent[]
+
+  @@map("wallets")
+}
+
+model WalletLabel {
+  id              String    @id @default(cuid())
+  walletId        String
+  createdByUserId String
+  labelType       LabelType @default(UNKNOWN)
+  title           String
+  note            String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  wallet    Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  createdBy User   @relation(fields: [createdByUserId], references: [id])
+
+  @@index([walletId])
+  @@index([createdByUserId])
+  @@map("wallet_labels")
+}
+
+model WalletCheck {
+  id                String      @id @default(cuid())
+  walletId          String
+  requestedByUserId String
+  requestedLimit    Int
+  requestedDepth    Int
+  status            CheckStatus @default(PENDING)
+  dataSource        String?
+  startedAt         DateTime?
+  finishedAt        DateTime?
+  errorCode         String?
+  createdAt         DateTime    @default(now())
+
+  wallet      Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  requestedBy User   @relation(fields: [requestedByUserId], references: [id])
+
+  @@index([walletId])
+  @@index([requestedByUserId])
+  @@map("wallet_checks")
+}
+
+model WalletEvent {
+  id                   String   @id @default(cuid())
+  walletId             String
+  externalEventId      String?
+  traceId              String?
+  transactionHash      String?
+  timestamp            DateTime
+  actionType           String
+  direction            String
+  senderAddress        String?
+  recipientAddress     String?
+  amountRaw            String?
+  amountFormatted      String?
+  assetType            String
+  assetSymbol          String?
+  assetContractAddress String?
+  nftAddress           String?
+  nftName              String?
+  collectionName       String?
+  comment              String?
+  memo                 String?
+  success              Boolean  @default(true)
+  source               String
+  normalizedPayload    Json?
+  createdAt            DateTime @default(now())
+
+  wallet Wallet @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([walletId])
+  @@index([walletId, externalEventId])
+  @@map("wallet_events")
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  userId       String?
+  action       String
+  resourceType String?
+  resourceId   String?
+  metadata     Json?
+  ipHash       String?
+  createdAt    DateTime @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
