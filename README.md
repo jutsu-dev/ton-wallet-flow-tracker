@@ -101,6 +101,8 @@ API keys are read from the server environment and used only in server-side code 
 
 `npm test` runs the Vitest suite (unit tests for address handling, amount formatting, DNS validation, sanitization, graph construction, provider mapping, resilience, rate limiting, and CSRF). A database integration test for authentication and sessions is gated on `DATABASE_URL`: it runs when a Postgres URL is present (locally and in CI) and is skipped otherwise. `npm run test:e2e` runs Playwright against a running instance (demo mode is enough); the browser tests are configured to point at `E2E_BASE_URL`.
 
+Seed the fixture accounts first (`npx tsx e2e/seed-users.ts` against the same `DATABASE_URL`), and give the suite a freshly started instance. Logins are budgeted per client IP (`LOGIN_MAX_ATTEMPTS * 3` per lockout window) in memory, and every test logs in from the same address — so a second run inside the window exhausts the budget and fails on login. Restarting the instance clears it; re-seeding alone does not. The seed also restores the one-time password the forced-password-change test consumes.
+
 ```bash
 npm test            # unit + (if DATABASE_URL set) integration
 npm run typecheck   # tsc --noEmit

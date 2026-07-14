@@ -3,6 +3,7 @@ import { getCurrentUser } from '@/server/auth/web';
 import { getEnv } from '@/lib/env';
 import { getDashboardData } from '@/server/analysis/dashboard';
 import { AnalyzeForm } from './analyze-form';
+import { TelegramChannelLink } from '@/components/telegram-access';
 import { Badge, Card } from '@/components/ui';
 import { LABEL_TYPE_LABELS } from '@/lib/i18n';
 import { DEMO_CENTER_ADDRESS } from '@/server/demo/fixtures';
@@ -22,6 +23,9 @@ export default async function DashboardPage() {
         <Card>
           <AnalyzeForm demo={env.DEMO_MODE} demoAddress={DEMO_CENTER_ADDRESS} />
         </Card>
+        <p className="text-xs text-muted-foreground">
+          Новости проекта: <TelegramChannelLink />
+        </p>
       </section>
 
       <div className="grid gap-6 md:grid-cols-2">

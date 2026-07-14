@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { loginAndLand } from './helpers';
 
 const ACCESS_URL = 'https://telegram.me/tonflowapp?direct';
 const CHANNEL_URL = 'https://t.me/tonflowapp';
@@ -63,4 +64,33 @@ test.describe('Telegram access block on the login page', () => {
     );
     expect(overflows).toBe(false);
   });
+});
+
+// One login for both widths: logins are budgeted per IP (LOGIN_MAX_ATTEMPTS * 3
+// per lockout window) and the whole suite shares 127.0.0.1.
+test('Telegram channel link on the dashboard, body and footer, at both widths', async ({ page }) => {
+  await loginAndLand(page, 'e2e-owner', 'E2e-Owner-Pass-1');
+
+  await expect(page.getByText('Новости проекта:')).toBeVisible();
+  const links = page.getByRole('link', { name: 't.me/tonflowapp' });
+  await expect(links).toHaveCount(2);
+  for (const link of await links.all()) {
+    await expect(link).toHaveAttribute('href', CHANNEL_URL);
+    await expect(link).toHaveAttribute('target', '_blank');
+    await expect(link).toHaveAttribute('rel', 'noopener noreferrer');
+  }
+
+  await page.setViewportSize({ width: 375, height: 667 });
+  await page.reload();
+  for (const link of await links.all()) {
+    await expect(link).toBeVisible();
+    const box = await link.boundingBox();
+    expect(box).not.toBeNull();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(375);
+  }
+  const overflows = await page.evaluate(
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth,
+  );
+  expect(overflows).toBe(false);
 });
