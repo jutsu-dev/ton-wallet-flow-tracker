@@ -12,7 +12,7 @@
 // them on demand: each URL gets a 10s timeout and two retries, and only a
 // definitive 404/410 counts as broken.
 
-import { readFile, readdir, access } from 'node:fs/promises';
+import { readFile, readdir, access, stat } from 'node:fs/promises';
 import { join, dirname, resolve, relative, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -150,7 +150,13 @@ for (const file of files) {
 
 // The reverse of link checking: an image nobody references is dead weight that
 // still ships in every clone, and nothing else would ever notice it.
+//
+// The size budget guards a real regression. Chrome writes unoptimized RGBA PNG,
+// so a regenerated screenshot lands several times larger than it needs to be —
+// and nothing about the picture looks wrong, so it goes unnoticed. See
+// CONTRIBUTING.md for how to bring one back under budget.
 const ASSET_DIR = join(ROOT, 'docs', 'assets');
+const ASSET_BUDGET_KB = 150;
 if (await exists(ASSET_DIR)) {
   const referenced = new Set();
   for (const file of files) {
@@ -162,6 +168,12 @@ if (await exists(ASSET_DIR)) {
   for (const asset of await readdir(ASSET_DIR)) {
     if (!referenced.has(asset)) {
       errors.push(`docs/assets/${asset}: committed but referenced by no document`);
+    }
+    const kb = Math.round((await stat(join(ASSET_DIR, asset))).size / 1024);
+    if (kb > ASSET_BUDGET_KB) {
+      errors.push(
+        `docs/assets/${asset}: ${kb}KB exceeds the ${ASSET_BUDGET_KB}KB budget — see CONTRIBUTING.md`,
+      );
     }
   }
 }

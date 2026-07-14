@@ -62,6 +62,17 @@ Notes:
 - **Formatting.** `npm run format` applies Prettier (with the Tailwind class-sorting plugin). `npm run format:check` verifies it.
 - **End-to-end.** `npm run test:e2e` runs Playwright against a running instance (demo mode is enough). Point it at your instance with `E2E_BASE_URL`. Seed the fixture accounts first and start a **fresh** instance — logins are budgeted per client IP in memory, so a second run inside the lockout window fails on login. See [TUTORIAL.md](TUTORIAL.md#b-local-development-without-docker).
 - **Documentation.** Every public Markdown document needs a Russian counterpart at `FILE.ru.md`, updated in the same commit. `npm run check:ru` enforces it and CI fails without it. `npm run check:links` verifies internal links, images and anchors; external links are checked only on demand via `npm run check:links:external`, so CI never depends on a third-party site being up.
+- **Screenshots.** Regenerate with `CAPTURE_SCREENSHOTS=1 npx playwright test e2e/screenshots.spec.ts` against a demo-mode instance. `check:links` also fails on an image in `docs/assets/` that no document references, and on any image over 150KB. The export sample comes from the app's own download, and Chrome writes unoptimized RGBA PNG, so it lands ~180KB and needs compressing. The diagram is effectively black and white — a 256-colour palette is visually identical and cuts it to ~50KB:
+
+  ```python
+  # python -m pip install Pillow
+  from PIL import Image
+  im = Image.open('docs/assets/export-preview.png').convert('RGB')
+  im.convert('P', palette=Image.ADAPTIVE, colors=256).save(
+      'docs/assets/export-preview.png', optimize=True, compress_level=9)
+  ```
+
+  Check the result before committing it: quantization is lossy, and a picture that got worse still looks like a picture.
 
 ## Branches and commits
 

@@ -38,7 +38,7 @@ TON Wallet Flow Tracker loads public TON account activity and renders transfers 
 
 ![Operations table](docs/assets/operations.png)
 
-**Export output** — the actual PNG the app produces, not a mock-up of one.
+**Export output** — the file the app actually produces, palette-compressed for the repository. Not a mock-up of one.
 
 ![Export output](docs/assets/export-preview.png)
 
