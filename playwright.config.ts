@@ -16,6 +16,7 @@ export default defineConfig({
   ],
   use: {
     baseURL,
+    viewport: { width: 1366, height: 900 },
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
