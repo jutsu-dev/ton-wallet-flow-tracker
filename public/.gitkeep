@@ -1,0 +1,11 @@
+# Keeps public/ in the repository even while it holds no assets.
+#
+# Git does not track empty directories, and the Dockerfile copies this directory
+# unconditionally (COPY --from=build /app/public ./public), so without a tracked
+# file here a clean clone fails to build. Next.js also serves static assets from
+# here by convention, so the directory is worth keeping rather than removing the
+# COPY — a missing asset that silently never ships is a worse failure than a
+# build error.
+#
+# robots.txt and sitemap.xml used to live here; they are now route handlers in
+# src/app, because both need the deployment's own APP_URL at runtime.
