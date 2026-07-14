@@ -1,7 +1,5 @@
 import type {
   AccountSummary,
-  ActionType,
-  AssetType,
   JettonBalance,
   NftItemSummary,
   WalletAction,
