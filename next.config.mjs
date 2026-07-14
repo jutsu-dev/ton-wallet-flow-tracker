@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Self-contained server output for the Docker runtime stage.
-  output: 'standalone',
   reactStrictMode: true,
   poweredByHeader: false,
   // No remote images: we never proxy arbitrary URLs (SSRF / open-proxy risk).

@@ -3,7 +3,10 @@
 // No API keys, plaintext passwords, raw session tokens, or seed phrases are stored.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // "native" covers local dev; the Debian target matches the Docker runtime
+  // (node:22-bookworm-slim = openssl 3.0). Pinning it avoids engine mismatches.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {

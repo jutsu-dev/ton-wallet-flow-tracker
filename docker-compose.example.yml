@@ -1,0 +1,62 @@
+# Example Compose file. Copy to docker-compose.yml (already provided) and adjust
+# the published port if 8137 is taken. Values come from .env (see .env.example).
+#
+#   cp .env.example .env      # then fill in keys and generated secrets
+#   docker compose up -d --build
+#
+# The app is published only on 127.0.0.1:8137. PostgreSQL stays on the internal
+# network and is never exposed to the host.
+
+name: ton-wallet-tracker
+
+services:
+  postgres:
+    image: postgres:16-bookworm
+    container_name: ton-wallet-tracker-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ton-wallet-tracker-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - '127.0.0.1:8137:3000'
+    volumes:
+      - ./secrets:/app/secrets
+    networks:
+      - internal
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -fsS http://127.0.0.1:3000/api/health || exit 1']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+
+networks:
+  internal:
+    name: ton-wallet-tracker-net
+    driver: bridge
+
+volumes:
+  pgdata:
+    name: ton-wallet-tracker-pgdata
