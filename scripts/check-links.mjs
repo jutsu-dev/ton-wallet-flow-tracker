@@ -148,6 +148,24 @@ for (const file of files) {
   }
 }
 
+// The reverse of link checking: an image nobody references is dead weight that
+// still ships in every clone, and nothing else would ever notice it.
+const ASSET_DIR = join(ROOT, 'docs', 'assets');
+if (await exists(ASSET_DIR)) {
+  const referenced = new Set();
+  for (const file of files) {
+    const md = await readFile(file, 'utf8');
+    for (const link of linksOf(md)) {
+      if (link.includes('docs/assets/')) referenced.add(link.split('/').pop().split('#')[0]);
+    }
+  }
+  for (const asset of await readdir(ASSET_DIR)) {
+    if (!referenced.has(asset)) {
+      errors.push(`docs/assets/${asset}: committed but referenced by no document`);
+    }
+  }
+}
+
 if (CHECK_EXTERNAL) {
   for (const [url, from] of externalSeen) {
     const result = await checkExternal(url);

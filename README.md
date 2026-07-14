@@ -25,7 +25,26 @@ TON Wallet Flow Tracker loads public TON account activity and renders transfers 
 
 ![Flow graph](docs/assets/graph.png)
 
-<sub>Both images are captured in demo mode. Every address, amount and label in them is synthetic.</sub>
+![The user guide at /docs](docs/assets/documentation.png)
+
+<sub>The user guide is public — it needs no account, so you can read what the tool does before requesting access.</sub>
+
+<details>
+<summary><b>More screenshots</b> — operations table and export output</summary>
+
+<br>
+
+**Operations table** — every normalized action, filterable by asset, direction and status, with free-text search across addresses and memos.
+
+![Operations table](docs/assets/operations.png)
+
+**Export output** — the actual PNG the app produces, not a mock-up of one.
+
+![Export output](docs/assets/export-preview.png)
+
+</details>
+
+<sub>Every image is captured in demo mode. All addresses, amounts and labels in them are synthetic.</sub>
 
 ## What it does
 

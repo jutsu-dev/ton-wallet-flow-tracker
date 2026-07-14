@@ -9,6 +9,14 @@ test.skip(!process.env.CAPTURE_SCREENSHOTS, 'set CAPTURE_SCREENSHOTS=1 to captur
 const DIR = 'docs/assets';
 
 test('capture demo-mode screenshots', async ({ page }) => {
+  // The guide first, signed out: it is a public page, so this is what a reader
+  // following the README actually sees. Viewport-height rather than fullPage —
+  // the whole guide is ~3400px tall, and README images are scaled to the content
+  // width, which turns a capture that long into an illegible grey strip.
+  await page.goto('/docs');
+  await expect(page.getByRole('heading', { name: 'Документация', level: 1 })).toBeVisible();
+  await page.screenshot({ path: `${DIR}/documentation.png` });
+
   await loginAndLand(page, 'e2e-owner', 'E2e-Owner-Pass-1');
 
   // The dashboard's recent-checks and labelled-wallets panels stay empty here by
@@ -31,8 +39,4 @@ test('capture demo-mode screenshots', async ({ page }) => {
   await page.getByRole('button', { name: 'Операции' }).click();
   await expect(page.getByRole('table')).toBeVisible();
   await page.screenshot({ path: `${DIR}/operations.png`, fullPage: true });
-
-  await page.goto('/docs');
-  await expect(page.getByRole('heading', { name: 'Документация', level: 1 })).toBeVisible();
-  await page.screenshot({ path: `${DIR}/documentation.png`, fullPage: true });
 });
