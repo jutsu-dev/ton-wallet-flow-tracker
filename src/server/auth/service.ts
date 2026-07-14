@@ -150,3 +150,15 @@ export async function setUserRole(userId: string, role: Role): Promise<void> {
   await prisma.user.update({ where: { id: userId }, data: { role } });
   await recordAudit({ action: 'user_role_changed', resourceType: 'user', resourceId: userId, metadata: { role } });
 }
+
+/** Verify a password without touching lockout/rate-limit state (for re-auth). */
+export async function verifyCurrentPassword(userId: string, password: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({ where: { id: userId } });
+  if (!user) return false;
+  return verifyPassword(user.passwordHash, password);
+}
+
+export async function listUsers(): Promise<PublicUser[]> {
+  const users = await prisma.user.findMany({ orderBy: { createdAt: 'asc' } });
+  return users.map(toPublicUser);
+}
