@@ -1,3 +1,5 @@
+[English](LIMITATIONS.md) | [Русский](LIMITATIONS.ru.md)
+
 # Limitations
 
 This is an honest list of what the tool does not do, or does only partially. It exists so nobody mistakes a display convenience for a guarantee. Some items are roadmap work; others are inherent to the data sources.
@@ -20,7 +22,7 @@ This is an honest list of what the tool does not do, or does only partially. It 
 
 - **The rate limiter is per-process.** Login lockout counters and analysis limits live in an in-memory map, which is correct for a single instance but does not coordinate across multiple app processes. A shared store is on the roadmap; until then, run one app instance (the default deployment does).
 - **The operations table pages on the client.** Filtering, search, sorting, and paging all run in the browser over the actions already loaded for the check, which are bounded by the source-event cap (up to 100). There is no server-side cursor paging of the full history yet, so histories longer than the cap are not shown in one view.
-- **User management has no admin screen yet.** The owner-only service functions to create users and change roles exist and are covered by tests, but there is no web UI wired to them. Additional users are created through the seed or a small script (see [OPERATIONS.md](OPERATIONS.md)).
+- **The admin screen is deliberately minimal.** `/admin` lists users, creates accounts, toggles active state and role, and shows the audit log — enough to run the app, but no search, paging, or bulk actions, and the audit view is capped at the most recent entries (see [OPERATIONS.md](OPERATIONS.md)).
 
 ## Visualization
 

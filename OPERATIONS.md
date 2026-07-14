@@ -1,3 +1,5 @@
+[English](OPERATIONS.md) | [Русский](OPERATIONS.ru.md)
+
 # Operations
 
 Day-two operations for a running instance: health, logs, backups, users, secret rotation, and the knobs that control limits.
@@ -43,18 +45,9 @@ Store dumps off-host, and verify them — a backup you have never restored is a 
 
 The first owner is created by the seed (`npm run db:seed` / on container startup) with a temporary password in `secrets/initial-owner-password`; the first login forces a change.
 
-Additional accounts are created by an owner. The owner-only service functions (`createUser`, `setUserRole`, `setUserActive`, `listUsers` in `src/server/auth/service.ts`) back this, and they are covered by the integration tests; there is not yet a web admin screen wired to them. Until there is, provision extra users from a checkout that has the source and dev tooling (the same environment that runs the seed), with a short `tsx` script that points `DATABASE_URL` at the running database, for example:
+Additional accounts are created by an owner on the **`/admin` page**, which is reachable from the header when signed in as an OWNER. It lists users, creates accounts, toggles active state and role, and shows the recent audit log. It is backed by the owner-only service functions (`createUser`, `setUserRole`, `setUserActive`, `listUsers` in `src/server/auth/service.ts`) through the route handlers under `src/app/api/admin/users`, and both layers are covered by tests.
 
-```ts
-// scripts/create-user.ts — run with: DATABASE_URL=… npx tsx scripts/create-user.ts
-import { createUser } from '../src/server/auth/service';
-
-createUser({ username: 'analyst1', password: process.env.TMP_PW!, role: 'MEMBER' })
-  .then((u) => console.log('created', u.username))
-  .catch((e) => { console.error(e); process.exit(1); });
-```
-
-New users are created with `mustChangePassword` set, so they must set their own password on first login. Pass the temporary password out of band (an environment variable, as above) rather than hard-coding it. Disabling a user (`setUserActive(false)`) immediately revokes their sessions. Deactivate departed users rather than deleting them, to keep audit references intact.
+New users are created with `mustChangePassword` set, so they must set their own password on first login. Pass the temporary password to them out of band. Disabling a user (`setUserActive(false)`) immediately revokes their sessions. Deactivate departed users rather than deleting them, to keep audit references intact.
 
 ## Rotating secrets
 

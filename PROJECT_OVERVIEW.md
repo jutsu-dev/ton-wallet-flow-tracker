@@ -1,3 +1,5 @@
+[English](PROJECT_OVERVIEW.md) | [Русский](PROJECT_OVERVIEW.ru.md)
+
 # Project Overview
 
 Open-source visual analytics tool for public TON blockchain activity.

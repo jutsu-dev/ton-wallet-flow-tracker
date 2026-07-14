@@ -1,26 +1,35 @@
 # Pull request
 
-## Summary
+<!--
+GitHub renders only one default pull request template, so this one is bilingual.
+Fill in either language — English or Russian. Do not fill in both.
+GitHub показывает только один шаблон pull request, поэтому он двуязычный.
+Заполняйте на любом из языков — английском или русском. Оба заполнять не нужно.
+-->
 
-<!-- What does this change do, and why? Link any related issue (e.g. Closes #123). -->
+## Summary / Описание
 
-## Changes
+<!-- EN: What does this change do, and why? Link any related issue (e.g. Closes #123). -->
+<!-- RU: Что меняет этот PR и зачем? Укажите связанную задачу (например, Closes #123). -->
 
-<!-- Bullet the notable changes. -->
+## Changes / Изменения
+
+<!-- EN: Bullet the notable changes. — RU: Перечислите заметные изменения. -->
 
 -
 
-## How was this tested?
+## How was this tested? / Как это проверялось?
 
-<!-- Commands run, scenarios exercised, demo-mode checks, etc. -->
+<!-- EN: Commands run, scenarios exercised, demo-mode checks, etc. -->
+<!-- RU: Какие команды запускались, какие сценарии проверены, проверки в демо-режиме и т. д. -->
 
-## Checklist
+## Checklist / Чек-лист
 
-- [ ] `npm run lint` passes
-- [ ] `npm run typecheck` passes
-- [ ] `npm test` passes
-- [ ] `npm run build` passes
-- [ ] Tests added or updated for the change
-- [ ] Documentation updated (README / API / ARCHITECTURE / others) if behavior, config, or the API surface changed
-- [ ] No secrets, API keys, real investigated addresses, or infrastructure hostnames/IPs in the diff
-- [ ] Commits follow Conventional Commits and contain no emoji
+- [ ] `npm run lint` passes / проходит
+- [ ] `npm run typecheck` passes / проходит
+- [ ] `npm test` passes / проходит
+- [ ] `npm run build` passes / проходит
+- [ ] Tests added or updated for the change / тесты добавлены или обновлены
+- [ ] Documentation updated (README / API / ARCHITECTURE / others) if behavior, config, or the API surface changed — **including the `.ru.md` counterpart in the same commit** / документация обновлена, включая русскую версию в том же коммите
+- [ ] No secrets, API keys, real investigated addresses, or infrastructure hostnames/IPs in the diff / в диффе нет секретов, ключей API, реальных расследуемых адресов, хостнеймов и IP
+- [ ] Commits follow Conventional Commits and contain no emoji / коммиты по Conventional Commits, без эмодзи

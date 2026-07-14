@@ -1,3 +1,5 @@
+[English](ROADMAP.md) | [Русский](ROADMAP.ru.md)
+
 # Roadmap
 
 This is a set of intentions, not promises or dates. Items may change or be dropped as the project learns more. If you want to help with any of them, open an issue first so we can agree on the shape of the work.
@@ -18,4 +20,4 @@ This is a set of intentions, not promises or dates. Items may change or be dropp
 
 - Cursor-based server paging for very long histories, so the operations table is not bounded by the source-event cap.
 - Per-transaction explorer links once transaction hashes are consistently available on the events path.
-- An owner-facing admin screen for user management on top of the existing owner-only service functions.
+- Search, paging and bulk actions on the `/admin` screen, which today lists users, creates accounts, toggles active state and role, and shows a capped audit log.

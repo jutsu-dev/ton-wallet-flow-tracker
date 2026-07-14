@@ -1,3 +1,5 @@
+[English](DECISIONS.md) | [Русский](DECISIONS.ru.md)
+
 # DECISIONS
 
 A running log of decisions made while building this project, with the reasoning and the
@@ -23,8 +25,9 @@ trade-offs. Newest entries are appended at the bottom of each section.
 **App port: `127.0.0.1:8137`.** Ports 3000/5432/8137 were all free. The app publishes only to
 `127.0.0.1:8137`; the container listens on 3000 internally. PostgreSQL is not published at all.
 
-**GitHub CLI is not logged in.** `gh auth status` reports no host. Publication is blocked until
-the owner logs in as `jutsu-dev`. Everything up to the publication gate is built locally.
+**GitHub CLI authentication gated publication.** For most of the build `gh auth status` reported
+no host, so everything up to the publication gate was built locally and publication waited. The
+owner has since authenticated as `jutsu-dev` and the repository is published.
 
 **Docker daemon was down at start.** Docker Desktop is installed but its engine was not running
 during initial inventory. Non-Docker work (lint, typecheck, unit tests, production build) does
@@ -44,8 +47,12 @@ not need it; the daemon is started before the containerized deploy and DB-integr
   deleted immediately after use, so the two temporary API keys never enter git, shell history,
   or this report. `POSTGRES_PASSWORD`, `SESSION_SECRET`, `AUTH_SECRET` come from
   `crypto.randomBytes` (24 / 48 / 48 bytes, base64url).
-- The two supplied TonAPI / TON Center keys are treated as compromised (shared privately). They
-  must be rotated before any publication; the new keys go only into the local `.env`.
+- The two supplied TonAPI / TON Center keys are treated as compromised (shared privately), and
+  rotating them was originally set as a precondition for publication. The owner overrode that:
+  the keys exist only in the local git-ignored `.env`, never in git, the build, or any published
+  artifact, and the secret scan confirms it, so publication went ahead without rotation.
+  Rotation remains the recommended follow-up; new keys go only into the local `.env`, and
+  nothing in the repository changes when it happens. See `PUBLICATION_CHECKLIST.md`.
 
 ## Stack choices
 

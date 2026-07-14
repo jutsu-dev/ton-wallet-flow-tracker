@@ -1,0 +1,50 @@
+name: Предложить улучшение
+description: Предложить улучшение или новую возможность
+title: "feat: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Спасибо за предложение. Пожалуйста, учитывайте рамки проекта: это
+        инструмент визуальной аналитики публичных ончейн-данных TON, который
+        намеренно не подключает кошельки, не перемещает средства и не пытается
+        устанавливать личности.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Проблема или мотивация
+      description: Что вы пытаетесь сделать и что мешает этому сегодня?
+      placeholder: Как аналитик, я хочу ..., чтобы ...
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Предлагаемое решение
+      description: Опишите поведение или возможность, которую хотели бы получить.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Рассмотренные альтернативы
+      description: Какие ещё подходы вы обдумывали и почему они не подошли.
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Дополнительный контекст
+      description: Макеты, ссылки или связанные issue. Не указывайте секреты и реальные расследуемые адреса.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Подтверждение
+      options:
+        - label: Я поискал среди существующих issue — это не дубликат.
+          required: true
+        - label: Предложение укладывается в рамки проекта: только публичные данные, только чтение.
+          required: true

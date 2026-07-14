@@ -1,3 +1,5 @@
+[English](THREAT_MODEL.md) | [Русский](THREAT_MODEL.ru.md)
+
 # Threat model
 
 A short, practical threat model. It is not exhaustive; it records the assets worth
@@ -54,7 +56,10 @@ protecting, the trust boundaries, the threats considered, and the residual risks
   return, and marks partial responses as incomplete.
 - TLS is delegated to the reverse proxy. If the proxy is misconfigured, `Secure` cookies and
   the origin model weaken.
-- The two API keys supplied during initial setup are temporary and must be rotated before the
-  repository is published. See PUBLICATION_CHECKLIST.md.
+- The two API keys supplied during initial setup were shared over a private channel and should be
+  treated as known to a third party. Rotating them was originally a precondition for publishing;
+  the owner accepted the residual risk instead, because the keys exist only in the local
+  git-ignored `.env` and appear in no commit, no build output, and no published artifact. Rotation
+  remains the recommended follow-up. See PUBLICATION_CHECKLIST.md.
 - A build-time postcss advisory (bundled in Next.js) is accepted because it only processes the
   project's own CSS during the build.

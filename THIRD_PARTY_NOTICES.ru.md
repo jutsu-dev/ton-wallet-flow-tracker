@@ -1,10 +1,10 @@
 [English](THIRD_PARTY_NOTICES.md) | [Русский](THIRD_PARTY_NOTICES.ru.md)
 
-# Third-Party Notices
+# Уведомления о стороннем ПО
 
-TON Wallet Flow Tracker depends on open-source software. The main direct dependencies are listed below with their licenses, as published by each project and confirmed against the installed packages. Transitive dependencies are not enumerated here.
+TON Wallet Flow Tracker зависит от программного обеспечения с открытым исходным кодом. Ниже перечислены основные прямые зависимости с их лицензиями — так, как их публикует каждый проект, и с проверкой по установленным пакетам. Транзитивные зависимости здесь не перечисляются.
 
-For an authoritative, exhaustive report across the whole dependency tree, generate one with a license checker, for example:
+За авторитетным и исчерпывающим отчётом по всему дереву зависимостей обратитесь к чекеру лицензий, например:
 
 ```bash
 npx license-checker-rseidelsohn --production --summary
@@ -12,9 +12,9 @@ npx license-checker-rseidelsohn --production --summary
 npx license-checker --json > third-party-licenses.json
 ```
 
-## Runtime dependencies
+## Зависимости времени выполнения
 
-| Package | Version | License |
+| Пакет | Версия | Лицензия |
 |---|---|---|
 | next | 15.5.20 | MIT |
 | react | 19.2.7 | MIT |
@@ -31,9 +31,9 @@ npx license-checker --json > third-party-licenses.json
 | tailwind-merge | 3.6.0 | MIT |
 | server-only | 0.0.1 | MIT |
 
-## Development dependencies
+## Зависимости для разработки
 
-| Package | Version | License |
+| Пакет | Версия | Лицензия |
 |---|---|---|
 | typescript | 6.0.3 | Apache-2.0 |
 | prisma | 6.19.3 | Apache-2.0 |
@@ -55,4 +55,4 @@ npx license-checker --json > third-party-licenses.json
 | prettier-plugin-tailwindcss | 0.8.0 | MIT |
 | tsx | 4.23.1 | MIT |
 
-Each dependency remains under its own license; the full license texts are distributed with the packages in `node_modules`. This project itself is licensed under Apache-2.0 (see [LICENSE](LICENSE) and [NOTICE](NOTICE)).
+Каждая зависимость остаётся под собственной лицензией; полные тексты лицензий поставляются вместе с пакетами в `node_modules`. Сам этот проект лицензирован под Apache-2.0 (см. [LICENSE](LICENSE) и [NOTICE](NOTICE)).

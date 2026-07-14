@@ -1,3 +1,5 @@
+[English](ARCHITECTURE.md) | [Русский](ARCHITECTURE.ru.md)
+
 # Architecture
 
 The codebase is organized so that pure logic never depends on frameworks, provider details never leak past the provider layer, and the Next.js app talks to the domain only through server services. This document maps the layers and walks through what happens when an address is analyzed.

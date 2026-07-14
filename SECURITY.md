@@ -1,3 +1,5 @@
+[English](SECURITY.md) | [Русский](SECURITY.ru.md)
+
 # Security
 
 This document describes the security model of TON Wallet Flow Tracker and how to
@@ -60,6 +62,10 @@ capped at 150 nodes / 300 edges with expansion depth ≤ 3.
 
 ## Dependency and secret scanning
 
-CI runs `npm audit`, `gitleaks`, a production build, and a Docker build. Two moderate
-advisories come from the postcss version bundled inside Next.js; that code only processes the
-project's own CSS at build time and is not reachable at runtime. See LIMITATIONS.md.
+CI runs `npm audit --omit=dev --audit-level=high`, `gitleaks` over the full history, a production
+build, a Docker build, and the documentation checks. The audit deliberately covers production
+dependencies only and fails on high or critical: that is the surface a user of the deployed app
+can reach. Two moderate advisories come from the postcss version bundled inside Next.js — they sit
+below that threshold and in dev tooling, so CI does not fail on them by design; that code only
+processes the project's own CSS at build time and is not reachable at runtime. Run `npm audit` with
+no flags to see them. See LIMITATIONS.md.

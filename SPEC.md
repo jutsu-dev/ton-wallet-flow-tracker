@@ -1,3 +1,5 @@
+[English](SPEC.md) | [Русский](SPEC.ru.md)
+
 # SPEC — TON Wallet Flow Tracker
 
 Technical specification for the application. This is the contract the implementation and

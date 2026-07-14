@@ -1,3 +1,5 @@
+[English](CONTRIBUTING.md) | [Русский](CONTRIBUTING.ru.md)
+
 # Contributing
 
 Thanks for your interest in improving TON Wallet Flow Tracker. This guide covers local setup, the checks a change has to pass, and the conventions used across the project.
@@ -41,21 +43,25 @@ npm run dev                  # http://localhost:3000
 
 ## Checks that must pass
 
-Every pull request has to be green on all four of these. Run them locally before you push:
+Every pull request has to be green on all five of these. Run them locally before you push:
 
 ```bash
 npm run lint         # next lint
 npm run typecheck    # tsc --noEmit (strict)
 npm test             # vitest
 npm run build        # prisma generate && next build
+npm run check:docs   # markdown links + Russian counterparts
 ```
+
+CI enforces more than that list: it also runs `npx prisma validate`, builds the Docker image, runs `npm audit --omit=dev --audit-level=high`, and scans the full Git history with gitleaks. Those need no local setup beyond Docker, but a PR that breaks them will go red.
 
 Notes:
 
 - **Tests.** `npm test` runs the unit suite with mocked providers and demo fixtures, so no API keys are required — this is also how CI runs. The authentication/session integration test is gated on `DATABASE_URL`: it runs when a Postgres URL is set (locally, and in CI where a Postgres service is provided) and is skipped otherwise. Please keep new logic covered; the domain and provider layers are pure and easy to test directly.
 - **Types.** The project is TypeScript strict with `noUncheckedIndexedAccess`. Avoid `any`; prefer narrowing untrusted input with the existing `parse` helpers and Zod schemas.
 - **Formatting.** `npm run format` applies Prettier (with the Tailwind class-sorting plugin). `npm run format:check` verifies it.
-- **End-to-end.** `npm run test:e2e` runs Playwright against a running instance (demo mode is enough). Point it at your instance with `E2E_BASE_URL`.
+- **End-to-end.** `npm run test:e2e` runs Playwright against a running instance (demo mode is enough). Point it at your instance with `E2E_BASE_URL`. Seed the fixture accounts first and start a **fresh** instance — logins are budgeted per client IP in memory, so a second run inside the lockout window fails on login. See [TUTORIAL.md](TUTORIAL.md#b-local-development-without-docker).
+- **Documentation.** Every public Markdown document needs a Russian counterpart at `FILE.ru.md`, updated in the same commit. `npm run check:ru` enforces it and CI fails without it. `npm run check:links` verifies internal links, images and anchors; external links are checked only on demand via `npm run check:links:external`, so CI never depends on a third-party site being up.
 
 ## Branches and commits
 

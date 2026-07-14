@@ -1,3 +1,5 @@
+[English](DEPLOYMENT.md) | [Русский](DEPLOYMENT.ru.md)
+
 # Deployment
 
 This describes a single-host deployment with Docker Compose: the app and PostgreSQL in one internal network, the database never exposed, and the app reachable only on loopback behind a reverse proxy that terminates TLS.

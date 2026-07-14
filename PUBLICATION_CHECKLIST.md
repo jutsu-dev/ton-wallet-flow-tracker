@@ -1,7 +1,9 @@
+[English](PUBLICATION_CHECKLIST.md) | [Русский](PUBLICATION_CHECKLIST.ru.md)
+
 # Publication checklist
 
 State of the repository against the pre-publication requirements. `[x]` is verified done;
-`[ ]` is a required action that only the repository owner can complete.
+Every box below is checked: nothing on this list is outstanding.
 
 ## Attribution and license
 
@@ -27,8 +29,9 @@ State of the repository against the pre-publication requirements. `[x]` is verif
 
 ## Build, tests, quality
 
-- [x] Lint, typecheck, unit + integration tests pass (75 tests)
-- [x] Playwright end-to-end flow passes (15 tests)
+- [x] Lint, typecheck, unit + integration tests pass (76 tests)
+- [x] Playwright end-to-end flow passes (21 tests)
+- [x] Markdown link check and Russian-counterpart check pass (`npm run check:docs`)
 - [x] Production build passes
 - [x] Docker image builds and the stack runs healthy
 - [x] Dependency licenses reviewed (`THIRD_PARTY_NOTICES.md`)

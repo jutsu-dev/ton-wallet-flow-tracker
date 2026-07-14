@@ -1,6 +1,10 @@
+[English](API.md) | [Русский](API.ru.md)
+
 # Internal API
 
-These are the application's own HTTP route handlers, consumed by its own pages and client components. This is **not** a public or stable API: there is no versioning, no API-key access, and shapes may change between releases. It is documented so contributors and operators know exactly what each endpoint expects and returns.
+These are the application's own HTTP route handlers. This is **not** a public or stable API: there is no versioning, no API-key access, and shapes may change between releases. It is documented so contributors and operators know exactly what each endpoint expects and returns.
+
+Most endpoints are called by the app's own client components. One is not: `POST /api/analyze` currently has no in-app caller, because the wallet page is a server component that calls `analyzeWallet()` directly instead of going back out over HTTP. It is kept because it is the same analysis contract the page uses, and it is covered by tests — but treat it as an unused surface rather than the path the UI takes.
 
 All endpoints are under `/api`. Request and response bodies are JSON.
 
@@ -172,6 +176,40 @@ Auth (no CSRF; read-only). Returns jetton balances and owned NFTs (`WalletAssets
 ```
 
 `400 invalid_address` for a bad address, `502 provider_unavailable` if both providers fail.
+
+---
+
+## Admin
+
+Owner-only. Every endpoint here returns `403 { "error": "forbidden" }` for a MEMBER and `401 { "error": "unauthorized" }` with no session. These back the `/admin` page.
+
+### GET /api/admin/users
+
+Auth, OWNER. Lists all accounts. Returns `{ "users": [...] }`; password hashes are never included.
+
+### POST /api/admin/users
+
+Auth + CSRF, OWNER. Creates an account. Body:
+
+```json
+{ "username": "analyst1", "password": "…", "role": "MEMBER" }
+```
+
+`username` is 3–64 characters of letters, digits, dot, dash or underscore. The new account is always created with `mustChangePassword` set, so the password supplied here is a temporary one.
+
+`201 { "user": … }` on success. `409 { "error": "username_taken" }` if the username exists, `400 { "error": "invalid_input" }` if the body fails validation.
+
+### PATCH /api/admin/users/:id
+
+Auth + CSRF, OWNER. Changes an account's state. Body — either field, both optional:
+
+```json
+{ "isActive": false, "role": "MEMBER" }
+```
+
+Disabling an account immediately revokes its sessions. An owner cannot disable or demote their own account: that returns `400 { "error": "cannot_modify_self" }`, which exists to prevent locking the last owner out.
+
+Returns `{ "ok": true }`.
 
 ---
 
