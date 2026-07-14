@@ -16,7 +16,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <Header username={user.username} role={user.role} demo={demo} />
+      <Header user={{ username: user.username, role: user.role }} demo={demo} />
       {demo ? (
         <div className="mx-auto w-full max-w-5xl px-4 pt-4">
           <Alert tone="warning">

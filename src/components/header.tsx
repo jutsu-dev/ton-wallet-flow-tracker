@@ -5,20 +5,22 @@ import { EXTERNAL_LINK_PROPS, GITHUB_URL, TELEGRAM_CHANNEL_URL } from '@/lib/lin
 
 const navLink = 'text-sm text-muted-foreground hover:text-foreground focus-visible:text-foreground';
 
+/**
+ * `user` is null on the public documentation page, which is readable without an
+ * account. Signed out, the header offers a way in instead of a way out.
+ */
 export function Header({
-  username,
-  role,
+  user,
   demo,
 }: {
-  username: string;
-  role: string;
+  user: { username: string; role: string } | null;
   demo: boolean;
 }) {
   return (
     <header className="border-b border-border">
       <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <Link href="/" className="font-semibold tracking-tight">
+          <Link href={user ? '/' : '/docs'} className="font-semibold tracking-tight">
             TON Wallet Flow Tracker
           </Link>
           <span className="hidden text-sm text-muted-foreground sm:inline">
@@ -29,7 +31,7 @@ export function Header({
           <Link href="/docs" className={navLink}>
             Документация
           </Link>
-          {role === 'OWNER' ? (
+          {user?.role === 'OWNER' ? (
             <Link href="/admin" className={navLink}>
               Пользователи
             </Link>
@@ -41,8 +43,16 @@ export function Header({
             Telegram
           </a>
           {demo ? <Badge>Демо</Badge> : null}
-          <span className="text-sm text-muted-foreground">{username}</span>
-          <LogoutButton />
+          {user ? (
+            <>
+              <span className="text-sm text-muted-foreground">{user.username}</span>
+              <LogoutButton />
+            </>
+          ) : (
+            <Link href="/login" className={navLink}>
+              Войти
+            </Link>
+          )}
         </nav>
       </div>
     </header>

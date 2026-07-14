@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/server/auth/web';
 import { TelegramAccess } from '@/components/telegram-access';
@@ -17,6 +18,18 @@ export default async function LoginPage() {
       </div>
       <LoginForm />
       <TelegramAccess />
+      {/* Readable without an account, so you can see what the tool does before
+          asking for one. */}
+      <p className="text-xs text-muted-foreground">
+        <Link href="/docs" className="underline underline-offset-2 hover:text-foreground">
+          Документация
+        </Link>{' '}
+        ·{' '}
+        <Link href="/docs?lang=en" className="underline underline-offset-2 hover:text-foreground">
+          Documentation
+        </Link>{' '}
+        — доступна без входа / readable without an account
+      </p>
       <p className="text-xs text-muted-foreground">
         Публичная регистрация недоступна. Учётные записи создаёт владелец.
       </p>

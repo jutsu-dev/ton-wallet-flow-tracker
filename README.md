@@ -166,7 +166,7 @@ The app must listen only on `127.0.0.1` with a reverse proxy terminating TLS in 
 | [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) | Dependency licenses |
 | [PUBLICATION_CHECKLIST.md](PUBLICATION_CHECKLIST.md) | Pre-publication verification state |
 
-Every document above has a Russian counterpart at `FILE.ru.md`. The in-app user guide lives at `/docs` and is available in Russian and English.
+Every document above has a Russian counterpart at `FILE.ru.md`. The in-app user guide lives at `/docs`, is available in Russian and English, and needs no account — you can read what the tool does before requesting access.
 
 ## Limitations
 

@@ -26,6 +26,11 @@ protecting, the trust boundaries, the threats considered, and the residual risks
 
 - **Browser ↔ app.** Untrusted client input crosses here. Mitigated by session auth, CSRF
   (double-submit + same-origin), Zod validation, CSP, and secure cookies.
+- **Unauthenticated surface.** Four routes are reachable without a session by design: `/login`,
+  `POST /api/auth/login`, `GET /api/health`, and the user guide at `/docs`. The guide is static
+  content compiled into the bundle — it reads no wallet, user or database data, and its only
+  input is a `lang` parameter validated against a two-value allowlist before use. Everything
+  else redirects to `/login`.
 - **App ↔ TON providers.** Upstream responses are untrusted data. Mitigated by the SSRF host
   allowlist, timeouts, retries with a circuit breaker, defensive JSON parsing (missing fields
   become `null` and are flagged incomplete, never invented), and metadata sanitization.
