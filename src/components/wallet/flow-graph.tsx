@@ -197,6 +197,14 @@ export function FlowGraph({ result, depth }: { result: AnalysisResult; depth: nu
     }
   }
 
+  // The zoom and lock buttons are interface chrome, not data. Without this they
+  // get rasterized into the corner of every exported diagram, which is not what
+  // anyone wants to paste into a report. React Flow renders them inside
+  // .react-flow__panel; skipping that node skips its subtree.
+  function withoutChrome(node: HTMLElement): boolean {
+    return !node.classList?.contains('react-flow__panel');
+  }
+
   async function exportImage(kind: 'png' | 'svg' | 'square') {
     const el = wrapperRef.current;
     if (!el) return;
@@ -204,9 +212,19 @@ export function FlowGraph({ result, depth }: { result: AnalysisResult; depth: nu
     await new Promise((r) => setTimeout(r, 250));
     const options =
       kind === 'square'
-        ? { backgroundColor: '#ffffff', width: 2048, height: 2048, canvasWidth: 2048, canvasHeight: 2048 }
-        : { backgroundColor: '#ffffff', pixelRatio: 2 };
-    const dataUrl = kind === 'svg' ? await toSvg(el, { backgroundColor: '#ffffff' }) : await toPng(el, options);
+        ? {
+            backgroundColor: '#ffffff',
+            width: 2048,
+            height: 2048,
+            canvasWidth: 2048,
+            canvasHeight: 2048,
+            filter: withoutChrome,
+          }
+        : { backgroundColor: '#ffffff', pixelRatio: 2, filter: withoutChrome };
+    const dataUrl =
+      kind === 'svg'
+        ? await toSvg(el, { backgroundColor: '#ffffff', filter: withoutChrome })
+        : await toPng(el, options);
     const link = document.createElement('a');
     link.download = `ton-flow.${kind === 'svg' ? 'svg' : 'png'}`;
     link.href = dataUrl;
