@@ -67,3 +67,28 @@ not need it; the daemon is started before the containerized deploy and DB-integr
   respected, a circuit breaker per provider, a small TTL cache, and a concurrency limiter.
 - Missing fields are `null` and flagged `isIncomplete`; nothing is fabricated. Each response is
   tagged with its source so the UI can show provenance.
+
+## Deployment and build
+
+- **Prisma `binaryTargets = ["native", "debian-openssl-3.0.x"]`.** `node:22-bookworm-slim`
+  ships without the openssl package, so `prisma generate` misdetected the engine as
+  `debian-openssl-1.1.x` while the runtime (where openssl is installed) is 3.0. Pinning the
+  Debian target and installing openssl in the build stage fixed the engine mismatch.
+- **Dropped `output: 'standalone'`.** The Docker runtime copies the full `node_modules` plus
+  `.next` and runs `next start`, which is simpler with Prisma than tracing the standalone
+  server. Standalone only added an unused directory and a startup warning.
+- **A throwaway dev PostgreSQL** (`twft-devdb`, `127.0.0.1:5433`, dev-only password) was used to
+  author migrations and run DB integration and Playwright tests, so the production `.env`
+  password was never needed outside the container.
+- **Custom structured logger** instead of pino, to avoid pino's worker-thread transports in
+  the Next bundle and to keep full control over secret/host redaction.
+
+## Scope adjustments
+
+- **Owner admin page** (`/admin`) lists users, creates accounts, toggles active/role, and shows
+  the audit log — enough to satisfy owner user-management and the "MEMBER cannot access OWNER
+  pages" test. It is intentionally minimal.
+- **Screenshots** are captured by an opt-in Playwright spec in demo mode, so every pixel is
+  synthetic and regenerating them is one command.
+- **Asset-trace mode** ships as provider capability (NFT history endpoints) without a dedicated
+  UI screen yet; it is listed in ROADMAP rather than claimed as a finished feature.
