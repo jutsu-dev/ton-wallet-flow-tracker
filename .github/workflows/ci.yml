@@ -55,8 +55,23 @@ jobs:
 
   secret-scan:
     runs-on: ubuntu-latest
+    env:
+      GITLEAKS_VERSION: 8.30.1
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
+
+      # Invoked directly rather than through gitleaks-action, which derives a
+      # <first-pushed-commit>^..<head> range from the push event. A repository's
+      # root commit has no parent, so that range is unresolvable on the first
+      # push and the scan exits non-zero having read nothing. Scanning the whole
+      # history every run is deterministic and matches what is run locally.
+      - name: Install gitleaks
+        run: |
+          curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz" \
+            | tar -xz -C /usr/local/bin gitleaks
+          gitleaks version
+
+      - name: Scan full git history for secrets
+        run: gitleaks detect --source . --redact --no-banner --exit-code 1
