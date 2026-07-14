@@ -20,6 +20,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
+      // These packages guard server/client boundaries at build time; in unit
+      // tests there is no such graph, so resolve them to an empty module.
+      'server-only': fileURLToPath(new URL('./src/test/empty-module.ts', import.meta.url)),
+      'client-only': fileURLToPath(new URL('./src/test/empty-module.ts', import.meta.url)),
     },
   },
 });
