@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    env:
+      # CI-only, non-secret placeholders. No real TON API keys are used; provider
+      # calls are mocked in tests.
+      DATABASE_URL: postgresql://tontracker:tontracker@localhost:5432/tontracker
+      SESSION_SECRET: ci-only-session-secret-not-a-real-secret
+      AUTH_SECRET: ci-only-auth-secret-not-a-real-secret-xx
+      APP_URL: http://localhost:3000
+      APP_ENV: test
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: tontracker
+          POSTGRES_PASSWORD: tontracker
+          POSTGRES_DB: tontracker
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U tontracker"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npx prisma generate
+      - run: npx prisma validate
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npx prisma migrate deploy
+      - run: npm test
+      - run: npm run build
+      - run: docker build -t ton-wallet-tracker-app:ci .
+      - name: Dependency audit (fail on high or critical)
+        run: npm audit --omit=dev --audit-level=high
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
