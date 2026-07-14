@@ -1,0 +1,67 @@
+name: Bug report
+description: Report a defect in TON Wallet Flow Tracker
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please do not include secrets,
+        API keys, passwords, real addresses under investigation, or server
+        hostnames/IPs in this report. Use the built-in demo mode to reproduce
+        where possible.
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of what the bug is.
+      placeholder: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Exact steps that trigger the problem.
+      placeholder: |
+        1. Go to '...'
+        2. Click on '...'
+        3. See the error
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen instead.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What actually happened. Include redacted logs or screenshots if helpful.
+    validations:
+      required: false
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: How you are running the app.
+      value: |
+        - Version / commit:
+        - Deployment: (Docker Compose / local dev)
+        - Demo mode: (on / off)
+        - Browser and OS:
+        - Node.js version (if running locally):
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmation
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This report contains no secrets, keys, real investigated addresses, or infrastructure details.
+          required: true
