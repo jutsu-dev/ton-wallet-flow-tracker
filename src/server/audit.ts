@@ -38,3 +38,28 @@ export async function recordAudit(input: AuditInput): Promise<void> {
     // swallow
   }
 }
+
+export interface AuditEntryDto {
+  id: string;
+  action: string;
+  resourceType: string | null;
+  resourceId: string | null;
+  createdAt: string;
+  username: string | null;
+}
+
+export async function listRecentAudit(limit = 50): Promise<AuditEntryDto[]> {
+  const rows = await prisma.auditLog.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+    include: { user: { select: { username: true } } },
+  });
+  return rows.map((row) => ({
+    id: row.id,
+    action: row.action,
+    resourceType: row.resourceType,
+    resourceId: row.resourceId,
+    createdAt: row.createdAt.toISOString(),
+    username: row.user?.username ?? null,
+  }));
+}

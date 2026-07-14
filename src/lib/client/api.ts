@@ -36,4 +36,5 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 }
 
 export const apiPost = <T>(path: string, body?: unknown): Promise<T> => request<T>('POST', path, body);
+export const apiPatch = <T>(path: string, body?: unknown): Promise<T> => request<T>('PATCH', path, body);
 export const apiDelete = <T>(path: string): Promise<T> => request<T>('DELETE', path);

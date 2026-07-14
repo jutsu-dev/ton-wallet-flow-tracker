@@ -10,6 +10,7 @@ export const ERROR_MESSAGES: Record<string, string> = {
   provider_unavailable: 'Источник данных временно недоступен. Попробуйте позже.',
   not_found: 'Данные не найдены.',
   internal: 'Внутренняя ошибка сервера.',
+  invalid: 'Неверное имя пользователя или пароль.',
   unauthorized: 'Требуется вход в систему.',
   csrf: 'Сессия устарела. Обновите страницу и повторите.',
   invalid_current: 'Текущий пароль неверен.',
