@@ -9,7 +9,7 @@ import type { NormalizedAddress } from '@/lib/ton/address';
 import { formatTon, formatUnits } from '@/lib/ton/format';
 import { sanitizeText } from '@/domain/sanitize';
 import { directionRelativeTo } from '@/domain/graph';
-import { asAmount, asArray, asNumber, asRecord, asString, extractAddress } from './parse';
+import { asAmount, asArray, asNumber, asRecord, asString } from './parse';
 import type { ProviderRuntime } from './runtime';
 import {
   ProviderError,
