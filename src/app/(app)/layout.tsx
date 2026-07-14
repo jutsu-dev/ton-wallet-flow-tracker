@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen flex-col">
       <Header username={user.username} role={user.role} demo={demo} />
       {demo ? (
-        <div className="mx-auto max-w-5xl px-4 pt-4">
+        <div className="mx-auto w-full max-w-5xl px-4 pt-4">
           <Alert tone="warning">
             Демонстрационный режим — используются искусственные данные.
           </Alert>

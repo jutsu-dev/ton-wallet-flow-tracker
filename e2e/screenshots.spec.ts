@@ -8,6 +8,9 @@ test.skip(!process.env.CAPTURE_SCREENSHOTS, 'set CAPTURE_SCREENSHOTS=1 to captur
 
 test('capture demo-mode screenshots', async ({ page }) => {
   await loginAndLand(page, 'e2e-owner', 'E2e-Owner-Pass-1');
+
+  // The dashboard panels stay empty here by design: demo mode returns fixtures
+  // before analyzeWallet reaches the database, so no check is ever recorded.
   await page.screenshot({ path: 'docs/screenshots/dashboard.png', fullPage: true });
 
   await page.goto('/wallet/EQDemoWallet?limit=25&depth=2');
