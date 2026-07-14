@@ -4,6 +4,9 @@ import { fileURLToPath } from 'node:url';
 
 export default defineConfig({
   plugins: [react()],
+  // tsconfig sets jsx: "preserve" for Next, which leaves esbuild on the classic
+  // transform and no auto React import. Component tests need the modern runtime.
+  esbuild: { jsx: 'automatic' },
   test: {
     environment: 'happy-dom',
     globals: true,

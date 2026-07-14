@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getCurrentUser } from '@/server/auth/web';
+import { TelegramAccess } from '@/components/telegram-access';
 import { LoginForm } from './login-form';
 
 export const dynamic = 'force-dynamic';
@@ -15,8 +16,12 @@ export default async function LoginPage() {
         <p className="text-sm text-muted-foreground">Вход для участников команды</p>
       </div>
       <LoginForm />
+      <TelegramAccess />
       <p className="text-xs text-muted-foreground">
         Публичная регистрация недоступна. Учётные записи создаёт владелец.
+      </p>
+      <p className="text-xs text-muted-foreground">
+        No public registration — accounts are created by the owner.
       </p>
     </main>
   );

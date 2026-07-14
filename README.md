@@ -25,6 +25,18 @@ The images below are placeholders captured in demo mode; all data in them is syn
 |---|---|---|
 | ![Dashboard](docs/screenshots/dashboard.png) | ![Flow graph](docs/screenshots/graph.png) | ![Operations table](docs/screenshots/operations.png) |
 
+## Access to the hosted instance
+
+The hosted instance is private. Request a username and temporary password through Telegram:
+
+https://telegram.me/tonflowapp?direct
+
+Project updates:
+
+https://t.me/tonflowapp
+
+There is no public registration.
+
 ## Architecture
 
 Four layers, kept deliberately separate:
@@ -69,7 +81,7 @@ To run the interface without any API keys, set `DEMO_MODE=true` and open the app
 
 ## Environment
 
-All configuration is via environment variables. Copy [.env.example](.env.example) to `.env` and fill it in; the file documents every key, including provider URLs and keys, the database URL, the session and auth secrets, analysis limits (per-window analyses, concurrency, source-event and depth caps, node/edge caps), login lockout, and provider/cache tuning. The server validates the environment with Zod at first use and refuses to start with a helpful list of offending keys — it never prints their values.
+All configuration is via environment variables. Copy [.env.example](.env.example) to `.env` and fill it in; the file documents every key, including provider URLs and keys, the database URL, the session and auth secrets, analysis limits (per-window analyses, concurrency, source-event and depth caps, node/edge caps), login lockout, provider/cache tuning, and the project's public Telegram links (`TELEGRAM_CHANNEL_URL`, `TELEGRAM_ACCESS_URL` — not secrets; they have working defaults). The server validates the environment with Zod at first use and refuses to start with a helpful list of offending keys — it never prints their values.
 
 ## Authentication
 

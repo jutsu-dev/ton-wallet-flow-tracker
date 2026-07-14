@@ -15,7 +15,7 @@ State of the repository against the pre-publication requirements. `[x]` is verif
 ## Secrets and sensitive data
 
 - [x] Real API keys absent from Git (`.env` never committed; only `.env.example` tracked)
-- [x] Git history scanned with gitleaks (14 commits, no leaks)
+- [x] Git history scanned with gitleaks (whole history, no leaks)
 - [x] gitleaks passed on the working tree and staged content
 - [x] `.env` is git-ignored and permission-restricted to the owner
 - [x] Database dumps, logs, `secrets/` excluded via `.gitignore`
@@ -27,8 +27,8 @@ State of the repository against the pre-publication requirements. `[x]` is verif
 
 ## Build, tests, quality
 
-- [x] Lint, typecheck, unit + integration tests pass (65 tests)
-- [x] Playwright end-to-end flow passes (10 tests)
+- [x] Lint, typecheck, unit + integration tests pass (75 tests)
+- [x] Playwright end-to-end flow passes (15 tests)
 - [x] Production build passes
 - [x] Docker image builds and the stack runs healthy
 - [x] Dependency licenses reviewed (`THIRD_PARTY_NOTICES.md`)
@@ -38,10 +38,13 @@ State of the repository against the pre-publication requirements. `[x]` is verif
 
 ## Blocking actions before any public push (owner only)
 
-- [ ] Rotate both temporary TonAPI / TON Center API keys and put the new ones only in the
-      local `.env` (they were shared privately and are treated as compromised)
+- [x] Owner gave explicit confirmation to create and push the public repository
 - [ ] Authenticate GitHub CLI as `jutsu-dev` (`gh auth login`) — currently not logged in
-- [ ] Re-run the secret scan after the key rotation
-- [ ] Give explicit confirmation to create and push the public repository
 
-Until every box above is checked, do not run `gh repo create` or `git push`.
+## Residual risk accepted by the owner
+
+The two TonAPI / TON Center keys in use were shared over a private channel, so they should be
+treated as known to a third party. The owner decided not to gate publication on rotating them:
+they exist only in the local git-ignored `.env`, never in Git, the build, or any published
+artifact, and the secret scan above confirms that. Rotating them remains the recommended
+follow-up; nothing in the repository has to change when it happens.
