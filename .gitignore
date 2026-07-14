@@ -1,0 +1,45 @@
+# --- Secrets & environment ---
+.env
+.env.local
+.env.*
+!.env.example
+!.env.test.example
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+
+# --- Logs, dumps, generated data ---
+*.log
+*.dump
+*.sql
+!prisma/migrations/
+!prisma/migrations/**
+backups/
+storage/
+exports/
+uploads/
+
+# --- Node / Next.js / build output ---
+node_modules/
+.next/
+out/
+build/
+dist/
+coverage/
+playwright-report/
+test-results/
+.turbo/
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# --- Prisma local artifacts ---
+prisma/*.db
+prisma/*.db-journal
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
