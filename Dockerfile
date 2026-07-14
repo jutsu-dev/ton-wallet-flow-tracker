@@ -1,14 +1,14 @@
 # syntax=docker/dockerfile:1
 
 # --- Dependencies ---
-FROM node:22-bookworm-slim AS deps
+FROM node:26-bookworm-slim AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
 COPY prisma ./prisma
 RUN npm ci
 
 # --- Build ---
-FROM node:22-bookworm-slim AS build
+FROM node:26-bookworm-slim AS build
 WORKDIR /app
 # openssl lets Prisma detect the correct engine target at generate time.
 RUN apt-get update \
@@ -19,7 +19,7 @@ COPY . .
 RUN npx prisma generate && npm run build
 
 # --- Runtime ---
-FROM node:22-bookworm-slim AS runner
+FROM node:26-bookworm-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
