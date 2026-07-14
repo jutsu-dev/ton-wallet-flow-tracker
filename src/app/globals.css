@@ -52,4 +52,11 @@
     word-break: break-all;
     overflow-wrap: anywhere;
   }
+  /* Keyboard focus must stay visible everywhere; the theme has no colour to
+     lean on, so a solid ring carries it. Pointer clicks are unaffected. */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 }

@@ -4,7 +4,7 @@ import {
   TELEGRAM_ACCESS_URL,
   TELEGRAM_CHANNEL_URL,
   displayUrl,
-} from '@/lib/telegram';
+} from '@/lib/links';
 
 /**
  * Accounts are handed out by hand over Telegram — there is no public
