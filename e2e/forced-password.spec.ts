@@ -10,5 +10,5 @@ test('a first-login user is forced to change password', async ({ page }) => {
   await page.getByLabel('Повторите новый пароль').fill('E2e-Changed-Pass-9');
   await page.getByRole('button', { name: 'Сменить пароль' }).click();
 
-  await expect(page.getByText('Анализ TON-адреса')).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('heading', { name: 'Схема переводов TON-адреса' })).toBeVisible({ timeout: 15000 });
 });

@@ -9,5 +9,7 @@ export async function login(page: Page, username: string, password: string): Pro
 
 export async function loginAndLand(page: Page, username: string, password: string): Promise<void> {
   await login(page, username, password);
-  await expect(page.getByText('Анализ TON-адреса')).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('heading', { name: 'Схема переводов TON-адреса' })).toBeVisible({
+    timeout: 15000,
+  });
 }

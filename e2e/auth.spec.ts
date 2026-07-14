@@ -14,7 +14,7 @@ test('wrong password shows an error and stays on login', async ({ page }) => {
 
 test('owner can log in and log out', async ({ page }) => {
   await login(page, 'e2e-owner', 'E2e-Owner-Pass-1');
-  await expect(page.getByText('Анализ TON-адреса')).toBeVisible({ timeout: 15000 });
+  await expect(page.getByRole('heading', { name: 'Схема переводов TON-адреса' })).toBeVisible({ timeout: 15000 });
   await page.getByRole('button', { name: 'Выйти' }).click();
   await expect(page).toHaveURL(/\/login/);
 });

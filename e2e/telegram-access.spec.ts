@@ -71,9 +71,15 @@ test.describe('Telegram access block on the login page', () => {
 test('Telegram channel link on the dashboard, body and footer, at both widths', async ({ page }) => {
   await loginAndLand(page, 'e2e-owner', 'E2e-Owner-Pass-1');
 
-  await expect(page.getByText('Новости проекта:')).toBeVisible();
+  await expect(page.getByText('Новости проекта')).toBeVisible();
+  // One in the dashboard's project card, one in the footer. The header's channel
+  // link is labelled "Telegram" and is asserted separately below.
   const links = page.getByRole('link', { name: 't.me/tonflowapp' });
   await expect(links).toHaveCount(2);
+  await expect(page.getByRole('link', { name: 'Telegram', exact: true })).toHaveAttribute(
+    'href',
+    CHANNEL_URL,
+  );
   for (const link of await links.all()) {
     await expect(link).toHaveAttribute('href', CHANNEL_URL);
     await expect(link).toHaveAttribute('target', '_blank');
